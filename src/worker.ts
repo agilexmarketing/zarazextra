@@ -15,6 +15,8 @@ export default {
   }
 };
 
+const ZARAZEXTRA_DISPLAY_NAME = `${ZARAZEXTRA_NAME} v${ZARAZEXTRA_VERSION}`;
+
 async function handleManagedComponentRequest(request: Request, env: ZarazExtraEnv, execContext: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
 
@@ -24,7 +26,8 @@ async function handleManagedComponentRequest(request: Request, env: ZarazExtraEn
     }
     return json({
       ok: true,
-      component: ZARAZEXTRA_NAME,
+      component: ZARAZEXTRA_DISPLAY_NAME,
+      componentName: ZARAZEXTRA_NAME,
       version: ZARAZEXTRA_VERSION,
       endpoint: 'Custom Managed Component',
       ui: {
@@ -51,7 +54,8 @@ async function handleManagedComponentRequest(request: Request, env: ZarazExtraEn
 
   if (url.pathname.endsWith('/init') || url.pathname === '/init') {
     return json({
-      component: context.component,
+      component: ZARAZEXTRA_DISPLAY_NAME,
+      componentName: ZARAZEXTRA_NAME,
       name: ZARAZEXTRA_NAME,
       version: ZARAZEXTRA_VERSION,
       componentPath: context.componentPath,
