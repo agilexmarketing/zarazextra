@@ -4,6 +4,8 @@ import { ZarazExtraClient } from './worker/client';
 import { ZarazExtraManager } from './worker/manager';
 import type { EventBody, InitBody, ZarazExtraEnv, WorkerContext } from './worker/context';
 import { ZARAZEXTRA_NAME, ZARAZEXTRA_VERSION } from './version';
+import type { ZarazExtraSettings } from './core/types';
+import { getConnectorsStatus } from './core/connector-status';
 
 export { ZarazExtraState };
 
@@ -20,7 +22,16 @@ async function handleManagedComponentRequest(request: Request, env: ZarazExtraEn
     if (url.pathname.endsWith('/version') || url.pathname === '/version') {
       return json({ name: ZARAZEXTRA_NAME, version: ZARAZEXTRA_VERSION });
     }
-    return json({ ok: true, component: ZARAZEXTRA_NAME, version: ZARAZEXTRA_VERSION, endpoint: 'Custom Managed Component' });
+    return json({
+      ok: true,
+      component: ZARAZEXTRA_NAME,
+      version: ZARAZEXTRA_VERSION,
+      endpoint: 'Custom Managed Component',
+      ui: {
+        where: 'Zaraz init response and /version endpoint',
+        note: 'Connector status is shown on /init based on current settings.'
+      }
+    });
   }
 
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -34,13 +45,19 @@ async function handleManagedComponentRequest(request: Request, env: ZarazExtraEn
 
   const context = createContext(body, env, execContext, Boolean((body as EventBody).debug));
   const manager = new ZarazExtraManager(context);
-  await zarazExtra(manager as any, body.settings || {});
+  const settings = (body.settings || {}) as ZarazExtraSettings;
+  const connectors = getConnectorsStatus(settings);
+  await zarazExtra(manager as any, settings);
 
   if (url.pathname.endsWith('/init') || url.pathname === '/init') {
     return json({
       component: context.component,
+      name: ZARAZEXTRA_NAME,
+      version: ZARAZEXTRA_VERSION,
       componentPath: context.componentPath,
       routePath: context.routePath,
+      connectors,
+      statusSummary: `meta=${connectors.meta.active ? 'ON' : 'OFF'}, tiktok=${connectors.tiktok.active ? 'ON' : 'OFF'}, ga4=${connectors.ga4.active ? 'ON' : 'OFF'}, googleAds=${connectors.googleAds.active ? 'ON' : 'OFF'}, linkedin=${connectors.linkedin.active ? 'ON' : 'OFF'}`,
       events: Object.keys(context.events),
       clientEvents: Object.keys(context.clientEvents),
       mappedEndpoints: [],
