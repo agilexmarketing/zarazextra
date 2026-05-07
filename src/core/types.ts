@@ -79,6 +79,7 @@ export type VisitorStateRecord = {
   visitor_id: string;
   created_at: string;
   updated_at: string;
+  expires_at?: string;
   first_touch?: Record<string, unknown>;
   last_touch?: Record<string, unknown>;
   event_count: number;

@@ -19,7 +19,7 @@ export async function enrichVisitorState(manager: Manager, event: NormalizedEven
     body: JSON.stringify({
       action: 'merge',
       visitor_id: visitorId,
-      ttl_days: Number(settings.stateTtlDays || 180),
+      ttl_days: Number(settings.stateTtlDays || 7),
       touch: {
         url: event.url,
         referrer: event.referrer,
