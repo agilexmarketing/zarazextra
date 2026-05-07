@@ -49,11 +49,15 @@ export function getAttribution(event: MCEvent, defaultShare?: string | number): 
 
   for (const key of ['campaign_id', 'adset_id', 'ad_id']) {
     const value = str(
-      payload[key] ||
       payload[`first_${key}`] ||
       client?.get?.(`first_${key}`) ||
+      url?.searchParams?.get(`first_${key}`) ||
+      payload[key] ||
       client?.get?.(key) ||
-      url?.searchParams?.get(key),
+      url?.searchParams?.get(key) ||
+      payload[`last_${key}`] ||
+      client?.get?.(`last_${key}`) ||
+      url?.searchParams?.get(`last_${key}`),
       128
     );
     if (value) attribution[key] = value;
