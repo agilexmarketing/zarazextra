@@ -1,18 +1,25 @@
 import type { ComponentSettings, Manager, MCEvent } from '@managed-components/types';
 import type { ZarazExtraSettings } from './core/types';
-import { enabled } from './core/utils';
+import { bool, enabled } from './core/utils';
 import { normalizeEvent } from './core/normalize-event';
 import { enrichVisitorState } from './core/visitor-state';
 import { sendGA4 } from './destinations/ga4';
 import { handleGoogleAdsPageview, sendGoogleAds } from './destinations/google-ads';
 import { sendMeta } from './destinations/meta';
 import { sendTikTok } from './destinations/tiktok';
+import { ZARAZEXTRA_NAME, ZARAZEXTRA_VERSION } from './version';
 
 export default async function zarazExtra(manager: Manager, rawSettings: ComponentSettings) {
   const settings = rawSettings as ZarazExtraSettings;
 
   manager.addEventListener('pageview', async event => {
     if (!enabled(settings.enabled, true)) return;
+    if (bool(settings.debugVersion)) {
+      event.client?.return?.({
+        component: ZARAZEXTRA_NAME,
+        version: ZARAZEXTRA_VERSION
+      });
+    }
     const normalized = normalizeEvent('pageview', event, settings);
     await enrichVisitorState(manager, normalized, settings);
     handleGoogleAdsPageview(normalized, settings);

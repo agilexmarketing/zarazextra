@@ -1,9 +1,17 @@
+export function has(value: unknown): boolean {
+  return value !== undefined && value !== null && String(value).trim() !== '';
+}
+
+export function bool(value: unknown): boolean {
+  if (value === true || value === 1 || value === '1') return true;
+  const s = String(value ?? '').trim().toLowerCase();
+  return s === 'true' || s === 'yes';
+}
+
 export function enabled(value: unknown, fallback = false): boolean {
-  if (value === undefined || value === null || value === '') return fallback;
-  if (value === true || value === 1) return true;
-  if (value === false || value === 0) return false;
-  const s = String(value).trim().toLowerCase();
-  return ['1', 'true', 'yes', 'on', 'enabled'].includes(s);
+  if (!has(value)) return fallback;
+  if (value === false || value === 0 || value === '0') return false;
+  return bool(value) || ['on', 'enabled'].includes(String(value).trim().toLowerCase());
 }
 
 export function str(value: unknown, max = 512): string {

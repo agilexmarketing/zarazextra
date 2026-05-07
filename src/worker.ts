@@ -3,6 +3,7 @@ import { ZarazExtraState } from './worker/state-object';
 import { ZarazExtraClient } from './worker/client';
 import { ZarazExtraManager } from './worker/manager';
 import type { EventBody, InitBody, ZarazExtraEnv, WorkerContext } from './worker/context';
+import { ZARAZEXTRA_NAME, ZARAZEXTRA_VERSION } from './version';
 
 export { ZarazExtraState };
 
@@ -16,7 +17,10 @@ async function handleManagedComponentRequest(request: Request, env: ZarazExtraEn
   const url = new URL(request.url);
 
   if (request.method === 'GET') {
-    return json({ ok: true, component: 'ZarazExtra', endpoint: 'Custom Managed Component' });
+    if (url.pathname.endsWith('/version') || url.pathname === '/version') {
+      return json({ name: ZARAZEXTRA_NAME, version: ZARAZEXTRA_VERSION });
+    }
+    return json({ ok: true, component: ZARAZEXTRA_NAME, version: ZARAZEXTRA_VERSION, endpoint: 'Custom Managed Component' });
   }
 
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);

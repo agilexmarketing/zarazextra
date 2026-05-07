@@ -1,7 +1,7 @@
 import type { Manager } from '@managed-components/types';
 import type { NormalizedEvent, ZarazExtraSettings } from '../core/types';
 import { ECOMMERCE_GA4_EVENTS, productId } from '../core/ecommerce';
-import { enabled, flattenKeys, getParamSafely, randomId, str, urlWithParam } from '../core/utils';
+import { bool, enabled, flattenKeys, getParamSafely, has, randomId, str, urlWithParam } from '../core/utils';
 
 const PREFIX_PARAMS_MAPPING: Record<string, string> = {
   checkout_id: 'transaction_id',
@@ -38,8 +38,8 @@ const PRODUCT_DETAILS_MAPPING: Record<string, string> = {
 };
 
 export async function sendGA4(manager: Manager, event: NormalizedEvent, settings: ZarazExtraSettings): Promise<void> {
-  if (!enabled(settings.ga4Enabled, !!settings.ga4MeasurementId)) return;
-  if (!settings.ga4MeasurementId) return;
+  const ga4Active = has(settings.ga4MeasurementId) && !bool(settings.ga4Disabled);
+  if (!ga4Active) return;
 
   const client = event.raw.client;
   let eventsCounter = parseInt(client?.get?.('ze_ga4_counter') || '') || 0;

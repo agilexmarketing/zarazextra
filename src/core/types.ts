@@ -5,29 +5,36 @@ export type Destination = 'ga4' | 'googleAds' | 'meta' | 'tiktok';
 export type ZarazExtraSettings = ComponentSettings & {
   enabled?: boolean | string;
   debug?: boolean | string;
+  debugVersion?: boolean | string;
 
-  ga4Enabled?: boolean | string;
   ga4MeasurementId?: string;
   ga4HideOriginalIP?: boolean | string;
+  ga4Audiences?: boolean | string;
+  ga4Disabled?: boolean | string;
 
-  googleAdsEnabled?: boolean | string;
   googleAdsConversionId?: string;
   googleAdsConversionLabel?: string;
   googleAdsGaAccount?: string;
+  googleAdsEnableConversionLinker?: boolean | string;
   googleAdsDomains?: string;
+  googleAdsDisabled?: boolean | string;
 
-  metaEnabled?: boolean | string;
   metaPixelId?: string;
   metaAccessToken?: string;
   metaTestEventCode?: string;
   metaApiVersion?: string;
   metaHideClientIP?: boolean | string;
   metaDefaultAttributionShare?: string | number;
+  metaDisabled?: boolean | string;
 
-  tiktokEnabled?: boolean | string;
   tiktokPixelId?: string;
   tiktokAccessToken?: string;
   tiktokTestEventCode?: string;
+  tiktokDisabled?: boolean | string;
+
+  linkedinPartnerId?: string;
+  linkedinConversionId?: string;
+  linkedinDisabled?: boolean | string;
 
   storeVisitorState?: boolean | string;
   stateTtlDays?: string | number;

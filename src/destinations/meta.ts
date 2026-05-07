@@ -1,14 +1,14 @@
 import type { Manager } from '@managed-components/types';
 import type { NormalizedEvent, ZarazExtraSettings } from '../core/types';
 import { ECOMMERCE_META_EVENTS, productId } from '../core/ecommerce';
-import { cleanObject, enabled, flattenKeys, sha256Hex, str } from '../core/utils';
+import { bool, cleanObject, enabled, flattenKeys, has, sha256Hex, str } from '../core/utils';
 
 const HASHED_USER_DATA = new Set(['em', 'ph', 'fn', 'ln', 'db', 'ge', 'ct', 'st', 'zp', 'country', 'external_id']);
 const PLAIN_USER_DATA = new Set(['subscription_id', 'fb_login_id', 'lead_id']);
 
 export async function sendMeta(manager: Manager, event: NormalizedEvent, settings: ZarazExtraSettings): Promise<void> {
-  if (!enabled(settings.metaEnabled, !!settings.metaPixelId && !!settings.metaAccessToken)) return;
-  if (!settings.metaPixelId || !settings.metaAccessToken) return;
+  const metaActive = has(settings.metaPixelId) && has(settings.metaAccessToken) && !bool(settings.metaDisabled);
+  if (!metaActive) return;
 
   const payload = await buildMetaPayload(event, settings);
   const apiVersion = settings.metaApiVersion || 'v21.0';

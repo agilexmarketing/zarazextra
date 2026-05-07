@@ -82,6 +82,7 @@ remarketing
 ## Settings
 
 All settings are plain Custom Managed Component settings in Zaraz.
+Connectors auto-enable when required credentials are present; no `*Enabled` flags are required.
 
 ### Global
 
@@ -95,40 +96,41 @@ stateTtlDays = 180
 ### Google Analytics 4
 
 ```text
-ga4Enabled = true
 ga4MeasurementId = G-XXXXXXXXXX
 ga4HideOriginalIP = false
+ga4Disabled = false
 ```
 
 ### Google Ads
 
 ```text
-googleAdsEnabled = true
 googleAdsConversionId = AW-XXXXXXXXX or XXXXXXXXX
 googleAdsConversionLabel = abc123
 googleAdsGaAccount = G-XXXXXXXXXX or UA-XXXXXX-Y
+googleAdsEnableConversionLinker = true
 googleAdsDomains = example.com,checkout.example.com
+googleAdsDisabled = false
 ```
 
 ### Meta/Facebook
 
 ```text
-metaEnabled = true
 metaPixelId = 123456789012345
 metaAccessToken = EAAB...
 metaTestEventCode = TEST12345
 metaApiVersion = v21.0
 metaHideClientIP = false
 metaDefaultAttributionShare = 1
+metaDisabled = false
 ```
 
 ### TikTok
 
 ```text
-tiktokEnabled = true
 tiktokPixelId = CXXXXXXXXXXXXXX
 tiktokAccessToken = your_access_token
 tiktokTestEventCode = TEST12345
+tiktokDisabled = false
 ```
 
 ## Event routing

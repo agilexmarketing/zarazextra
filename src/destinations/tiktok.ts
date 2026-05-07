@@ -1,11 +1,11 @@
 import type { Manager } from '@managed-components/types';
 import type { NormalizedEvent, ZarazExtraSettings } from '../core/types';
 import { ECOMMERCE_TIKTOK_EVENTS, productId } from '../core/ecommerce';
-import { cleanObject, enabled, sha256Hex, str } from '../core/utils';
+import { bool, cleanObject, has, sha256Hex, str } from '../core/utils';
 
 export async function sendTikTok(manager: Manager, event: NormalizedEvent, settings: ZarazExtraSettings): Promise<void> {
-  if (!enabled(settings.tiktokEnabled, !!settings.tiktokPixelId && !!settings.tiktokAccessToken)) return;
-  if (!settings.tiktokPixelId || !settings.tiktokAccessToken) return;
+  const tiktokActive = has(settings.tiktokPixelId) && has(settings.tiktokAccessToken) && !bool(settings.tiktokDisabled);
+  if (!tiktokActive) return;
 
   const body = await buildTikTokPayload(event, settings);
   manager.fetch('https://business-api.tiktok.com/open_api/v1.2/pixel/track/', {

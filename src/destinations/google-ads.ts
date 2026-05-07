@@ -1,16 +1,17 @@
 import type { Manager } from '@managed-components/types';
 import type { NormalizedEvent, ZarazExtraSettings } from '../core/types';
-import { cleanObject, enabled, str, urlWithParam } from '../core/utils';
+import { bool, cleanObject, enabled, has, str, urlWithParam } from '../core/utils';
 
 export function handleGoogleAdsPageview(event: NormalizedEvent, settings: ZarazExtraSettings): void {
-  if (!enabled(settings.googleAdsEnabled, !!settings.googleAdsConversionId)) return;
+  const googleAdsActive = has(settings.googleAdsConversionId) && has(settings.googleAdsConversionLabel) && !bool(settings.googleAdsDisabled);
+  if (!googleAdsActive) return;
   setGclAwCookie(event);
-  if (settings.googleAdsDomains) runConversionLinker(event, settings);
+  if (enabled(settings.googleAdsEnableConversionLinker, true) && settings.googleAdsDomains) runConversionLinker(event, settings);
 }
 
 export async function sendGoogleAds(manager: Manager, event: NormalizedEvent, settings: ZarazExtraSettings, mode: 'conversion' | 'remarketing' = 'conversion'): Promise<void> {
-  if (!enabled(settings.googleAdsEnabled, !!settings.googleAdsConversionId)) return;
-  if (!settings.googleAdsConversionId) return;
+  const googleAdsActive = has(settings.googleAdsConversionId) && has(settings.googleAdsConversionLabel) && !bool(settings.googleAdsDisabled);
+  if (!googleAdsActive) return;
 
   setGclAwCookie(event);
   const client = event.raw.client;
