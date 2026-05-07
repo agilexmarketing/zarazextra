@@ -1,0 +1,39 @@
+<script>
+(function () {
+  if (window.__zarazExtraAttributionInstalled) return;
+  window.__zarazExtraAttributionInstalled = true;
+
+  function clean(v) { return String(v || '').trim().slice(0, 256); }
+  function setZ(key, value) {
+    value = clean(value);
+    if (!value || !window.zaraz || typeof window.zaraz.set !== 'function') return;
+    window.zaraz.set(key, value, { scope: 'persist' });
+  }
+  function get(key) { try { return localStorage.getItem('__ze_' + key); } catch (e) { return ''; } }
+  function put(key, value) { try { localStorage.setItem('__ze_' + key, value); } catch (e) {} }
+
+  var p = new URLSearchParams(location.search);
+  var keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','campaign_id','adset_id','ad_id','fbclid','gclid','ttclid','li_fat_id','msclkid'];
+  var hasTouch = false;
+
+  keys.forEach(function (key) {
+    var v = clean(p.get(key));
+    if (!v) return;
+    hasTouch = true;
+    setZ('last_' + key, v);
+    if (!get('first_' + key)) put('first_' + key, v);
+  });
+
+  if (hasTouch && !get('first_landing_page')) put('first_landing_page', location.href);
+  if (hasTouch && !get('first_seen_at')) put('first_seen_at', new Date().toISOString());
+
+  keys.forEach(function (key) {
+    var v = get('first_' + key);
+    if (v) setZ('first_' + key, v);
+  });
+  var lp = get('first_landing_page');
+  if (lp) setZ('first_landing_page', lp);
+  var seen = get('first_seen_at');
+  if (seen) setZ('first_seen_at', seen);
+})();
+</script>

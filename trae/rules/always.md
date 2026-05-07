@@ -1,0 +1,1 @@
+- Intotdeauna fa git add;commit;push intr-o singura comanda fara alte if-uri

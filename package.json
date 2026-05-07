@@ -1,0 +1,43 @@
+{
+  "name": "zarazextra",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Advanced Cloudflare Zaraz Custom Managed Component for GA4, Google Ads, Meta CAPI and TikTok Events API with Durable Object visitor state.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/worker.js",
+  "scripts": {
+    "build": "node esbuild.js",
+    "build:component": "node esbuild.component.js",
+    "deploy": "npm run build && wrangler deploy",
+    "deploy:component-cli": "npm run build:component && npx managed-component-to-cloudflare-worker ./dist/component.js zarazextra",
+    "check": "tsc --noEmit"
+  },
+  "keywords": [
+    "zaraz",
+    "cloudflare",
+    "managed-component",
+    "tracking",
+    "analytics",
+    "meta-capi",
+    "tiktok-events-api",
+    "google-ads",
+    "ga4"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@managed-components/types": "^1.3.2",
+    "@cloudflare/workers-types": "^4.20260415.0",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.5.4",
+    "wrangler": "^4.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agilexmarketing/zarazextra.git"
+  },
+  "homepage": "https://github.com/agilexmarketing/zarazextra#readme",
+  "bugs": {
+    "url": "https://github.com/agilexmarketing/zarazextra/issues"
+  }
+}
