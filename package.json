@@ -1,6 +1,6 @@
 {
   "name": "zarazextra",
-  "version": "1.3",
+  "version": "1.4",
   "private": false,
   "description": "Advanced Cloudflare Zaraz Custom Managed Component for GA4, Google Ads, Meta CAPI and TikTok Events API with Durable Object visitor state.",
   "license": "MIT",

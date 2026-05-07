@@ -14,5 +14,5 @@ tag = "v1"
 new_sqlite_classes = ["ZarazExtraState"]
 
 [vars]
-ZARAZEXTRA_VERSION = "1.3"
+ZARAZEXTRA_VERSION = "1.4"
 ZARAZEXTRA_NAME = "ZarazExtra"
