@@ -1,2 +1,2 @@
 export const ZARAZEXTRA_NAME = 'ZarazExtra';
-export const ZARAZEXTRA_VERSION = '1.4';
+export const ZARAZEXTRA_VERSION = '1.5';
